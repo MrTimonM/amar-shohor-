@@ -133,17 +133,7 @@ Every screen a user actually looks at.
 
 ---
 
-## How this is evidenced
 
-Each member holds commits under their own GitHub account in this repository, and
-[`.github/CODEOWNERS`](.github/CODEOWNERS) records which directories belong to whom. The division
-above is therefore **verifiable from the repository history** rather than asserted only in this
-document.
-
-```bash
-git shortlog -sne        # commits per author
-git log --format='%an  %s'
-```
 
 See also [`docs/SRS-Amar-Shohor.pdf`](docs/SRS-Amar-Shohor.pdf) for the full requirements
 specification, and [`CONTRIBUTING.md`](CONTRIBUTING.md) for the working agreement.
