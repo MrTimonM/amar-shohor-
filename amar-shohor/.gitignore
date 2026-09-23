@@ -1,0 +1,15 @@
+node_modules/
+dist/
+build/
+.env
+.env.local
+*.log
+var/
+.DS_Store
+Thumbs.db
+.vite/
+coverage/
+__pycache__/
+*.pyc
+.venv/
+services/ai/.venv/

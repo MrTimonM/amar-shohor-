@@ -1,0 +1,27 @@
+{
+  "name": "amar-shohor",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Citizens report city problems; duplicates collapse into one verified problem on a live map, ranked and tracked in public until fixed.",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "concurrently -n api,web -c green,cyan \"npm:dev:api\" \"npm:dev:web\"",
+    "dev:api": "npm run dev -w @amar/api",
+    "dev:web": "npm run dev -w @amar/web",
+    "dev:ai": "cd services/ai && uvicorn app.main:app --reload --port 8000",
+    "build": "npm run build -w @amar/web && npm run build -w @amar/api",
+    "seed": "npm run seed -w @amar/api",
+    "typecheck": "tsc -b apps/api apps/web --pretty",
+    "staff": "npm run staff -w @amar/api"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "typescript": "^5.7.3"
+  }
+}

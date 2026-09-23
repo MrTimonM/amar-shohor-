@@ -1,0 +1,34 @@
+# Dependencies and build output
+node_modules/
+dist/
+dist-bundle/
+build/
+.vite/
+coverage/
+*.tsbuildinfo
+
+# Secrets — never commit these. .env.example is the template.
+.env
+.env.local
+*.env.local
+
+# Uploaded media lives on disk, not in git
+var/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# The per-member handover folder. Staging only; not part of the project.
+Upload/
+
+# Local tooling
+.claude/
+.codex/
+.agents/
+.impeccable/
+skills-lock.json
+*.log
+.DS_Store
+Thumbs.db
