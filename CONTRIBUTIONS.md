@@ -136,4 +136,4 @@ Every screen a user actually looks at.
 
 
 See also [`docs/SRS-Amar-Shohor.pdf`](docs/SRS-Amar-Shohor.pdf) for the full requirements
-specification, and [`CONTRIBUTING.md`](CONTRIBUTING.md) for the working agreement.
+specification for the working agreement.
