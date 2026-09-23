@@ -4,6 +4,13 @@ Citizens report city problems in under a minute. Duplicate reports collapse into
 problem** on a live map, ranked by an explainable priority score, assigned to an authority, and
 tracked in public until it is fixed.
 
+**Live:** https://amar-shohor.vercel.app &nbsp;|&nbsp; sign in with `admin@amarshohor.test` /
+`amar1234`, or any of the [demonstration accounts](#demonstration-accounts).
+
+Nothing needs installing to look around: reading the map and the dashboard never requires an
+account. See [CONTRIBUTIONS.md](../CONTRIBUTIONS.md) for who built which part, and
+[docs/SRS-Amar-Shohor.pdf](../docs/SRS-Amar-Shohor.pdf) for the requirements specification.
+
 ---
 
 ## Run it
@@ -54,8 +61,42 @@ department but no code is refused. Leaving `STAFF_SIGNUP_CODE` blank closes staf
 entirely, which is the right setting for anything that is not a demo.
 
 Seeded accounts all share `SEED_PASSWORD` (default `amar1234`), so a jury can sign in as any role
-without looking anything up. Seeded people who are not the operator get addresses under the reserved
-`.test` TLD, which by RFC 2606 can never resolve.
+without looking anything up. They use addresses under the reserved `.test` TLD, which by RFC 2606
+can never resolve, so none of them can be mistaken for a real person or accidentally mailed.
+
+#### Demonstration accounts
+
+Every account below uses the password **`amar1234`**. Sign in at
+[`/signin`](https://amar-shohor.vercel.app/signin).
+
+| Role | Email | Department | What it can do |
+|---|---|---|---|
+| **Admin** | `admin@amarshohor.test` | all | Everything below, plus issue and withdraw staff access at `/admin` |
+| Authority | `roads@amarshohor.test` | Roads & Infrastructure | Triage, assign and resolve road and footpath problems |
+| Authority | `water@amarshohor.test` | Water & Drainage | Waterlogging and drainage |
+| Authority | `waste@amarshohor.test` | Waste Management | Rubbish accumulation |
+| Authority | `electrical@amarshohor.test` | Street Lighting | Broken street lights |
+| Authority | `traffic@amarshohor.test` | Traffic Control | Signals and congestion |
+| Authority | `environment@amarshohor.test` | Environment | Environmental hazards |
+
+A department account can only act on **its own** department's problems. Sign in as `waste@` and
+open a pothole: the update control is replaced by a line saying the roads department owns it, and
+the API refuses the request even if you call it directly. Use `admin@` to act across departments.
+
+There is no seeded citizen account on purpose — creating one takes about thirty seconds on the
+sign-up form, and doing that live shows the flow a real reporter uses.
+
+To create another authority account, choose **City authority** on the sign-up form and enter the
+staff code from `STAFF_SIGNUP_CODE` (`amar-staff-2026` in the sample configuration), or issue a
+fresh one from `/admin`.
+
+`npm run staff` recreates all seven accounts and a staff code per department at any time. Unlike
+`npm run seed` it wipes nothing, so it is safe against a database with real reports in it.
+
+> **These are public demonstration credentials on a public deployment.** Anyone who reads this file
+> can sign in as the administrator of the live site. That is deliberate for a demo, but change
+> `SEED_PASSWORD` and re-run `npm run staff` before the deployment is used for anything that
+> matters.
 
 **Phone sign-in was removed.** There is no SMS gateway, and a channel that cannot deliver is worse
 than one that is absent: the endpoints, schemas and UI are gone rather than left to fail. `phone`
