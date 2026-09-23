@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="bn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Amar Shohor — আমার শহর</title>
+    <meta
+      name="description"
+      content="Report a city problem in under a minute. Duplicate reports become one verified problem on a live map, ranked and tracked in public until it is fixed."
+    />
+
+    <!--
+      Theme is applied before first paint. Without this the page flashes light
+      before React mounts, which on a dark-mode phone is genuinely unpleasant.
+    -->
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('amar.theme');
+          var theme = stored === 'light' || stored === 'dark' ? stored : null;
+          if (theme) document.documentElement.setAttribute('data-theme', theme);
+          var lang = localStorage.getItem('amar.lang');
+          document.documentElement.lang = lang === 'en' ? 'en' : 'bn';
+        } catch (e) {
+          /* private mode: fall through to the system theme */
+        }
+      })();
+    </script>
+    <meta name="theme-color" content="#f5f6f4" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0e1412" media="(prefers-color-scheme: dark)" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Hind+Siliguri:wght@400;500;600&display=swap"
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2300694c'/%3E%3Cpath d='M16 7c-3.6 0-6.5 2.9-6.5 6.5 0 4.6 6.5 11.5 6.5 11.5s6.5-6.9 6.5-11.5C22.5 9.9 19.6 7 16 7z' fill='none' stroke='white' stroke-width='2'/%3E%3Ccircle cx='16' cy='13.4' r='2.4' fill='white'/%3E%3C/svg%3E"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,352 @@
+/*
+ * The map is part of the design system, not a bright rectangle punched through
+ * the page. Tiles, markers, clusters and popups all take their colour from the
+ * same tokens as everything else.
+ */
+
+.map-page {
+  display: grid;
+  grid-template-columns: 384px minmax(0, 1fr);
+  height: calc(100vh - var(--top-h));
+  min-height: 0;
+}
+.map-side {
+  border-right: 1px solid var(--line);
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.map-side-head {
+  padding: var(--s3) var(--s4);
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+.map-side-list {
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+.map-holder {
+  position: relative;
+  min-width: 0;
+}
+.map-canvas {
+  width: 100%;
+  height: 100%;
+}
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  background: var(--surface-2);
+  font-family: var(--font);
+  outline: none;
+}
+
+@media (max-width: 900px) {
+  .map-page {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 1fr;
+    height: calc(100vh - var(--top-h) - var(--tabs-h));
+  }
+  .map-side {
+    display: none;
+  }
+  .map-page.list-open .map-side {
+    display: flex;
+    border-right: 0;
+  }
+  .map-page.list-open .map-holder {
+    display: none;
+  }
+}
+
+/* --- markers ---------------------------------------------------------- */
+
+.pin {
+  width: 30px;
+  height: 30px;
+  border-radius: 50% 50% 50% 4px;
+  transform: rotate(-45deg);
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--surface);
+  box-shadow: 0 2px 6px rgba(8, 14, 11, 0.35);
+  background: var(--band-low);
+}
+.pin > svg {
+  transform: rotate(45deg);
+  color: #fff;
+  width: 15px;
+  height: 15px;
+}
+.pin.critical {
+  background: var(--band-critical);
+}
+.pin.high {
+  background: var(--band-high);
+}
+.pin.medium {
+  background: var(--band-medium);
+}
+.pin.low {
+  background: var(--band-low);
+}
+/* A resolved problem stays on the map but stops shouting. */
+.pin.done {
+  background: var(--ok);
+  opacity: 0.72;
+}
+.pin.selected {
+  outline: 3px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* The report flow's draggable pin. Accent rather than a priority band: it is
+   the citizen's own control, not a problem's severity. */
+.pin.pick {
+  background: var(--accent);
+  cursor: grab;
+}
+.pin.pick:active {
+  cursor: grabbing;
+}
+
+/* Not placed yet — GPS was refused or has not answered. Hollow, so it reads as
+   a pin waiting to be put somewhere rather than a claim about where the
+   problem is, and it pulses gently to say it wants moving. */
+.pin.pick.unplaced {
+  background: var(--surface);
+  border-color: var(--accent);
+  box-shadow: 0 2px 6px rgba(8, 14, 11, 0.25), 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
+  animation: pin-wants-placing 2.2s ease-in-out infinite;
+}
+.pin.pick.unplaced > svg {
+  color: var(--accent);
+}
+
+@keyframes pin-wants-placing {
+  0%,
+  100% {
+    box-shadow: 0 2px 6px rgba(8, 14, 11, 0.25), 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
+  }
+  50% {
+    box-shadow: 0 2px 6px rgba(8, 14, 11, 0.25), 0 0 0 10px color-mix(in srgb, var(--accent) 0%, transparent);
+  }
+}
+
+/* Report count sits on the pin, because "how many people reported this" is
+   the number a citizen actually scans for. */
+.pin-count {
+  position: absolute;
+  top: -5px;
+  right: -6px;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 20px;
+  background: var(--ink);
+  color: var(--ground);
+  border: 1.5px solid var(--surface);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 14px;
+  text-align: center;
+  transform: rotate(45deg);
+}
+
+.pin-wrap {
+  position: relative;
+}
+
+.cluster {
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-ink);
+  border: 3px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  font-family: var(--mono);
+  font-size: 12.5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- controls --------------------------------------------------------- */
+
+.map-controls {
+  position: absolute;
+  top: var(--s3);
+  right: var(--s3);
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.map-filters {
+  position: absolute;
+  top: var(--s3);
+  left: var(--s3);
+  right: 58px;
+  z-index: 500;
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+  /* The row scrolls past the right edge. Without this the last chip is simply
+     sliced mid-word and nothing says more exist; the fade makes the overflow
+     legible instead of looking like a rendering fault. */
+  mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+}
+.map-filters::-webkit-scrollbar {
+  display: none;
+}
+/* The fade must not eat the last chip once the row has been scrolled to its
+   end, so it is removed when there is nothing further to reveal. */
+.map-filters.at-end {
+  mask-image: none;
+  -webkit-mask-image: none;
+}
+.map-filters .chip {
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  flex: 0 0 auto;
+}
+
+.map-legend {
+  position: absolute;
+  left: var(--s3);
+  bottom: var(--s3);
+  z-index: 500;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  box-shadow: var(--shadow);
+  padding: 9px 11px;
+  font-size: 11.5px;
+  color: var(--ink-2);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.map-legend .row {
+  gap: 7px;
+}
+.map-legend i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+
+/* On a phone the four-row legend was taking a quarter of the map's width to
+   explain four colours. It lies down instead, so the map keeps the screen. */
+@media (max-width: 900px) {
+  .map-legend {
+    left: var(--s3);
+    right: 76px;
+    bottom: var(--s3);
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 10px;
+    padding: 7px 10px;
+  }
+  .map-legend .eyebrow {
+    width: 100%;
+  }
+}
+
+/* Leaflet's own chrome, restyled rather than left as default blue. */
+.leaflet-control-attribution {
+  background: var(--surface) !important;
+  color: var(--ink-3) !important;
+  font-size: 10.5px !important;
+  border-top-left-radius: 4px;
+  padding: 1px 6px !important;
+}
+.leaflet-control-attribution a {
+  color: var(--ink-2) !important;
+}
+.leaflet-bar {
+  border: 1px solid var(--line) !important;
+  border-radius: var(--r-sm) !important;
+  overflow: hidden;
+  box-shadow: var(--shadow) !important;
+}
+.leaflet-bar a {
+  background: var(--surface) !important;
+  color: var(--ink-2) !important;
+  border-bottom-color: var(--line) !important;
+  width: 34px !important;
+  height: 34px !important;
+  line-height: 34px !important;
+}
+.leaflet-bar a:hover {
+  background: var(--surface-2) !important;
+  color: var(--ink) !important;
+}
+.leaflet-bar a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+/* Below 900px the camera button owns the bottom-right corner and the zoom
+   buttons were landing underneath it. Touch has pinch and double-tap, so the
+   buttons go rather than the primary action moving. */
+@media (max-width: 900px) {
+  .leaflet-control-zoom {
+    display: none !important;
+  }
+}
+
+.leaflet-popup-content-wrapper {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-lift);
+  padding: 0;
+}
+.leaflet-popup-content {
+  margin: 0;
+  width: 244px !important;
+  font-family: var(--font);
+}
+.leaflet-popup-tip {
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+.leaflet-popup-close-button {
+  color: var(--ink-3) !important;
+  padding: 6px 7px 0 0 !important;
+}
+
+/* Dark tiles need a nudge: raster basemaps are built for light UI. */
+:root[data-theme='dark'] .leaflet-tile-pane,
+:root:not([data-theme='light']) .leaflet-tile-pane {
+  filter: none;
+}
+
+/* The ward overlay, subtle enough to read boundaries without competing with
+   the pins. */
+.ward-shape {
+  fill: var(--accent);
+  fill-opacity: 0.04;
+  stroke: var(--accent);
+  stroke-opacity: 0.35;
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+}
+
+.locate-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--info);
+  border: 2px solid var(--surface);
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--info) 22%, transparent);
+}

@@ -1,0 +1,232 @@
+/* The front door.
+   Every colour here is a token, so light, dark and system all follow from
+   tokens.css rather than being re-decided in this file. */
+
+.home {
+  max-width: 1040px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s7);
+}
+
+/* --- hero ---------------------------------------------------------------- */
+
+.home-hero {
+  text-align: center;
+  padding-block: var(--s5) 0;
+}
+
+.home-hero h1 {
+  margin: var(--s3) 0 0;
+  /* Scales with the viewport but stops growing on a desktop, where a longer
+     measure hurts more than a bigger headline helps. */
+  font-size: clamp(27px, 5vw, 42px);
+  line-height: 1.16;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.home-hero .lede {
+  margin: var(--s4) auto 0;
+  max-width: 62ch;
+  color: var(--ink-2);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+/* Bengali conjuncts sit taller than the Latin scale allows for. */
+html[lang='bn'] .home-hero h1 {
+  line-height: 1.35;
+}
+html[lang='bn'] .home-hero .lede {
+  line-height: 1.85;
+}
+
+.home-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s3);
+  justify-content: center;
+  margin-top: var(--s5);
+}
+
+/* --- live figures -------------------------------------------------------- */
+
+.home-figures {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--s3);
+}
+
+.figure {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+  align-items: center;
+  text-align: center;
+}
+
+.figure-value {
+  font-size: 30px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.figure-label {
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--ink-3);
+}
+
+/* `.card + .card` gives stacked cards their vertical rhythm in normal flow.
+   Inside a grid row every card after the first is *also* an adjacent sibling,
+   so that same margin lands as a mysterious downward nudge and the first tile
+   of the row sits proud of the others. Grids place their own gaps. */
+.home-figures > .card + .card,
+.door-grid > .card + .card {
+  margin-top: 0;
+}
+
+/* --- section headings ---------------------------------------------------- */
+
+.section-head {
+  margin: 0 0 var(--s4);
+  font-size: 19px;
+  font-weight: 620;
+  letter-spacing: -0.01em;
+  text-align: center;
+}
+
+/* --- the two doors ------------------------------------------------------- */
+
+.door-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: var(--s4);
+  align-items: stretch;
+}
+
+/* The card is the grid item, so both doors end up the same height and their
+   buttons line up regardless of how much body copy each one carries. That
+   needs the column to run the whole way down: card -> body -> door. */
+.door-grid > .card {
+  display: flex;
+  flex-direction: column;
+}
+
+.door-grid > .card > .card-body {
+  display: flex;
+  flex: 1;
+}
+
+.door {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s3);
+  flex: 1;
+}
+
+.door-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--r);
+  background: var(--accent-wash);
+  color: var(--accent);
+}
+
+.door h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 620;
+  letter-spacing: -0.01em;
+}
+
+.door-body {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.door-points {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+  /* Pushes the button to the bottom so the two cards' actions align. */
+  flex: 1;
+}
+
+.door-points li {
+  display: flex;
+  gap: var(--s2);
+  align-items: flex-start;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+.door-points .ico {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: var(--accent);
+}
+
+.door-note {
+  margin: 0;
+}
+
+/* --- how it works -------------------------------------------------------- */
+
+.how-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--s5);
+}
+
+.how {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+}
+
+.how-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--ink-2);
+}
+
+.how h3 {
+  margin: var(--s1) 0 0;
+  font-size: 15px;
+  font-weight: 620;
+}
+
+.how p {
+  margin: 0;
+  color: var(--ink-3);
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+@media (max-width: 640px) {
+  .home {
+    gap: var(--s6);
+  }
+  .home-cta .btn {
+    width: 100%;
+  }
+}

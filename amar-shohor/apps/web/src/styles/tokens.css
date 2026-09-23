@@ -1,0 +1,206 @@
+/*
+ * Phase 02 — the token layer.
+ *
+ * Every colour in the app comes from here. Three theme states are handled, not
+ * two: an explicit choice stamps data-theme on <html>, and the default "system"
+ * setting stamps nothing, so only prefers-color-scheme separates light from
+ * dark. A colour whose only definition sits inside a media query or a
+ * [data-theme] block is the classic unreadable-UI bug — so components style
+ * through tokens and never redefine colour inside those blocks.
+ */
+
+:root {
+  /* Surfaces. The neutral carries a slight green bias toward the accent, so
+     it reads as chosen rather than inherited from a framework default. */
+  --ground: #f5f6f4;
+  --surface: #ffffff;
+  --surface-2: #eef1ee;
+  --surface-3: #e4e9e5;
+  --line: #dfe4e0;
+  --line-2: #c6cfc9;
+
+  /* Ink */
+  --ink: #16211c;
+  --ink-2: #4a5a52;
+  --ink-3: #74847b;
+  --ink-4: #9aa8a0;
+
+  /* Accent — bottle green. Structural: nav, links, focus, primary action. */
+  --accent: #00694c;
+  --accent-hover: #005440;
+  --accent-ink: #ffffff;
+  --accent-wash: #e4efea;
+  --accent-line: #a9cfc0;
+
+  /* Semantic status. Separate from the accent, and never used decoratively:
+     these four carry the issue lifecycle and nothing else. */
+  --ok: #157f4a;
+  --ok-wash: #e7f5ed;
+  --ok-line: #a8d9bf;
+
+  --wait: #8a5a0c;
+  --wait-wash: #fdf3e2;
+  --wait-line: #eed6a8;
+
+  --bad: #b3261e;
+  --bad-wash: #fdecea;
+  --bad-line: #f0bfbb;
+
+  --info: #3d5a73;
+  --info-wash: #e7edf3;
+  --info-line: #bdcedd;
+
+  /* Priority bands. A deliberate ramp, not a reuse of the status colours —
+     an issue can be critical and resolved at the same time. */
+  --band-critical: #a8321f;
+  --band-high: #b5721a;
+  --band-medium: #4a7a4e;
+  --band-low: #6b7d86;
+
+  /* Chart series. Two series carrying identity, not state, so they come from
+     a categorical pair rather than the status colours — a green/amber pair
+     fails colour-vision separation, which is why this is blue and orange.
+     Both modes were checked with the palette validator: lightness band,
+     chroma floor, CVD separation, normal-vision floor and contrast all pass. */
+  --series-reported: #c2620f;
+  --series-resolved: #2563a8;
+  --grid: #e6eae7;
+
+  /* Type */
+  --font: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-bn: 'Hind Siliguri', 'Noto Sans Bengali', system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Consolas, monospace;
+
+  /* An 8px rhythm with two half-steps, so spacing is a choice from a set. */
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 24px;
+  --s6: 32px;
+  --s7: 48px;
+
+  --r-sm: 6px;
+  --r: 10px;
+  --r-lg: 14px;
+
+  --shadow: 0 1px 2px rgba(22, 33, 28, 0.05), 0 1px 3px rgba(22, 33, 28, 0.04);
+  --shadow-lift: 0 4px 14px rgba(22, 33, 28, 0.1);
+  --shadow-sheet: 0 -8px 32px rgba(22, 33, 28, 0.14);
+
+  --nav-w: 244px;
+  --top-h: 56px;
+  --tabs-h: 62px;
+
+  /* Leaflet basemap: swapped by the theme, so the map is part of the system
+     rather than a bright rectangle punched through a dark page. */
+  --map-tiles: light;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --ground: #0e1412;
+    --surface: #151d1a;
+    --surface-2: #1c2622;
+    --surface-3: #24302b;
+    --line: #27332e;
+    --line-2: #3a4a43;
+
+    --ink: #e8ede9;
+    --ink-2: #a7b5ad;
+    --ink-3: #7d8c84;
+    --ink-4: #5f6d66;
+
+    --accent: #43c29a;
+    --accent-hover: #6fd6b4;
+    --accent-ink: #06251c;
+    --accent-wash: #122a23;
+    --accent-line: #2c5747;
+
+    --ok: #4ec48a;
+    --ok-wash: #10251a;
+    --ok-line: #2a4d38;
+
+    --wait: #d9a23f;
+    --wait-wash: #2a2113;
+    --wait-line: #4f3f20;
+
+    --bad: #e8776d;
+    --bad-wash: #2c1614;
+    --bad-line: #55302c;
+
+    --info: #8fb4d2;
+    --info-wash: #16232e;
+    --info-line: #2f4557;
+
+    --band-critical: #e8776d;
+    --band-high: #d9a23f;
+    --band-medium: #6fbf7a;
+    --band-low: #8b9aa3;
+
+    --series-reported: #c87c26;
+    --series-resolved: #4288d2;
+    --grid: #222d28;
+
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-lift: 0 4px 14px rgba(0, 0, 0, 0.5);
+    --shadow-sheet: 0 -8px 32px rgba(0, 0, 0, 0.55);
+
+    --map-tiles: dark;
+    color-scheme: dark;
+  }
+}
+
+/* An explicit choice wins in both directions. */
+:root[data-theme='dark'] {
+  --ground: #0e1412;
+  --surface: #151d1a;
+  --surface-2: #1c2622;
+  --surface-3: #24302b;
+  --line: #27332e;
+  --line-2: #3a4a43;
+
+  --ink: #e8ede9;
+  --ink-2: #a7b5ad;
+  --ink-3: #7d8c84;
+  --ink-4: #5f6d66;
+
+  --accent: #43c29a;
+  --accent-hover: #6fd6b4;
+  --accent-ink: #06251c;
+  --accent-wash: #122a23;
+  --accent-line: #2c5747;
+
+  --ok: #4ec48a;
+  --ok-wash: #10251a;
+  --ok-line: #2a4d38;
+
+  --wait: #d9a23f;
+  --wait-wash: #2a2113;
+  --wait-line: #4f3f20;
+
+  --bad: #e8776d;
+  --bad-wash: #2c1614;
+  --bad-line: #55302c;
+
+  --info: #8fb4d2;
+  --info-wash: #16232e;
+  --info-line: #2f4557;
+
+  --band-critical: #e8776d;
+  --band-high: #d9a23f;
+  --band-medium: #6fbf7a;
+  --band-low: #8b9aa3;
+
+  --series-reported: #c87c26;
+  --series-resolved: #4288d2;
+  --grid: #222d28;
+
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-lift: 0 4px 14px rgba(0, 0, 0, 0.5);
+  --shadow-sheet: 0 -8px 32px rgba(0, 0, 0, 0.55);
+
+  --map-tiles: dark;
+  color-scheme: dark;
+}
