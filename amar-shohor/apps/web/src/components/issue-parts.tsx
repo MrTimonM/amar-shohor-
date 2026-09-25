@@ -3,7 +3,7 @@ import { STATUS_META, type IssueSummary, type PriorityResult, type ReportSummary
 import { Icon } from './Icon';
 import { BandTag, Meter, Pill, ScoreRing, StatusPill } from './ui';
 import { COPY, useUi } from '../lib/ui-context';
-import { distance, num, relativeTime, slaText } from '../lib/format';
+import { absoluteTime, distance, num, relativeTime, slaText } from '../lib/format';
 
 /**
  * The pieces that make the product's claims legible: why an issue is ranked
@@ -214,9 +214,12 @@ export function Timeline({ events }: { events: StatusEventView[] }) {
             <Icon name={event.status === 'resolved' ? 'check' : event.status === 'rejected' ? 'close' : 'chevron'} size={13} />
           </span>
           <div className="grow">
-            <div className="tl-title">{statusLabel(event.status)}</div>
+            <div className="tl-title">
+              {event.from && event.from !== event.status && <>{statusLabel(event.from)} → </>}
+              {statusLabel(event.status)}
+            </div>
             <div className="tl-meta">
-              {event.actor.name} · {relativeTime(event.at, lang)}
+              {event.actor.name} · <time dateTime={event.at}>{absoluteTime(event.at, lang)}</time>
             </div>
             {event.note && <p className="tl-note">{event.note}</p>}
             {event.proofPhotos && event.proofPhotos.length > 0 && (

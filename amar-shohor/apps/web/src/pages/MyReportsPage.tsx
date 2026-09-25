@@ -20,7 +20,7 @@ export function MyReportsPage() {
   const [queued, setQueued] = useState<QueuedReport[]>([]);
   const [flushing, setFlushing] = useState(false);
 
-  const mine = useQuery({ queryKey: ['my-reports'], queryFn: api.myReports });
+  const mine = useQuery({ queryKey: ['my-reports', user?.id], queryFn: api.myReports });
 
   useEffect(() => {
     void listQueued().then(setQueued);
@@ -150,6 +150,9 @@ export function MyReportsPage() {
                     )}
                     <Link className="tiny" to={`/issue/${report.issue.id}`}>
                       {t({ en: 'Open the problem', bn: 'সমস্যাটি দেখুন' })} →
+                    </Link>
+                    <Link className="tiny" to={`/history/${report.issue.id}`}>
+                      {t({ en: 'View history', bn: 'ইতিহাস দেখুন' })} →
                     </Link>
                   </div>
                 ) : report.mergeDecision === 'pending' ? (

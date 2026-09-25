@@ -94,6 +94,35 @@ issuesRouter.get(
   }),
 );
 
+// History includes closed problems. Citizens see their own submissions;
+// staff retain the department and ward scope of their workspace.
+issuesRouter.get('/history', route(async (req, res) => {
+  const auth = requireUser(req);
+  const filter: Record<string, unknown> = {};
+  if (auth.role !== 'authority' && auth.role !== 'admin') {
+    filter._id = { $in: await Report.distinct('issueId', { reporterId: auth.id }) };
+  } else if (auth.role !== 'admin') {
+    if (!auth.department) throw HttpError.forbidden('This account has no department assigned.');
+    filter.department = auth.department;
+    if (auth.wardIds.length) filter.wardId = { $in: auth.wardIds };
+  }
+  const status = req.query.status;
+  if (status !== undefined) {
+    if (typeof status !== 'string' || !(STATUSES as readonly string[]).includes(status)) {
+      throw HttpError.badRequest('Choose a valid status.');
+    }
+    filter.status = status;
+  }
+  const page = Number(req.query.page ?? 1);
+  if (!Number.isSafeInteger(page) || page < 1 || page > 100000) throw HttpError.badRequest('Invalid page.');
+  const limit = 20;
+  const [items, total] = await Promise.all([
+    Issue.find(filter).sort({ updatedAt: -1, _id: -1 }).skip((page - 1) * limit).limit(limit).lean<(IssueDoc & { _id: unknown })[]>(),
+    Issue.countDocuments(filter),
+  ]);
+  res.json({ items: items.map((issue) => issueSummary(issue)), total, page, limit });
+}));
+
 issuesRouter.get(
   '/:id',
   route(async (req, res) => {
@@ -101,7 +130,7 @@ issuesRouter.get(
 
     const [reports, timeline, ward, assignee] = await Promise.all([
       Report.find({ issueId: issue._id }).sort({ createdAt: 1 }).lean<(ReportDoc & { _id: unknown })[]>(),
-      StatusEvent.find({ issueId: issue._id }).sort({ at: 1 }).lean<(StatusEventDoc & { _id: unknown })[]>(),
+      StatusEvent.find({ issueId: issue._id }).sort({ at: 1, _id: 1 }).lean<(StatusEventDoc & { _id: unknown })[]>(),
       issue.wardId ? Ward.findById(issue.wardId).lean<WardDoc & { _id: unknown }>() : null,
       issue.assigneeId ? User.findById(issue.assigneeId).lean<UserDoc & { _id: unknown }>() : null,
     ]);

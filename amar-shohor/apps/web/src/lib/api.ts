@@ -122,6 +122,8 @@ export interface StaffRow {
 }
 
 export const api = {
+  history: (page: number, status?: string) =>
+    request<{ items: IssueSummary[]; total: number; page: number; limit: number }>(`/issues/history${qs({ page, status })}`),
   /** Not under /v1 — it is the load-balancer probe as well as a UI signal. */
   health: async () => {
     const res = await fetch('/health');

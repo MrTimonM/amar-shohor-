@@ -144,6 +144,7 @@ export function issueSummary(
 
 export const statusEvent = (e: WithId<StatusEventDoc>): StatusEventView => ({
   id: id(e),
+  from: e.from,
   status: e.status as Status,
   note: e.note ?? undefined,
   actor: { name: e.actorName ?? 'System', role: (e.actorRole as Role) ?? 'admin' },

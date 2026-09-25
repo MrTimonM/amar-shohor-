@@ -273,7 +273,7 @@ export function IssuePage() {
             </Card>
           )}
 
-          <Card title={t(COPY.timeline)}>
+          <Card title={t({ en: 'Status history', bn: 'অবস্থার ইতিহাস' })}>
             {issue.timeline.length === 0 ? (
               <p className="small muted">{t({ en: 'Nothing recorded yet.', bn: 'এখনও কিছু নথিভুক্ত হয়নি।' })}</p>
             ) : (

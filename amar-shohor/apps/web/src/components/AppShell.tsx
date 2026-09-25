@@ -25,6 +25,7 @@ const CITIZEN_NAV: NavEntry[] = [
   { to: '/report', icon: 'camera', label: COPY.navReport },
   { to: '/mine', icon: 'list', label: COPY.navMine },
   { to: '/dashboard', icon: 'chart', label: COPY.navDashboard },
+  { to: '/history', icon: 'clock', label: { en: 'History', bn: 'ইতিহাস' } },
 ];
 
 const STAFF_NAV: NavEntry[] = [
@@ -152,7 +153,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <nav className="tabs" aria-label={t({ en: 'Sections', bn: 'বিভাগ' })}>
         {/* Home is reachable from the brand mark, so the bottom bar spends its
             four slots on destinations instead. */}
-        {(isStaff ? [CITIZEN_NAV[1]!, ...STAFF_NAV, CITIZEN_NAV[4]!] : CITIZEN_NAV.slice(1)).map((entry) => (
+        {(isStaff ? [CITIZEN_NAV[1]!, ...STAFF_NAV, CITIZEN_NAV[4]!] : CITIZEN_NAV.slice(1, 5)).map((entry) => (
           <NavLink key={entry.to} to={entry.to} end={entry.end} className={({ isActive }) => `tab${isActive ? ' on' : ''}`}>
             <Icon name={entry.icon} size={20} />
             {t(entry.label)}

@@ -14,6 +14,7 @@ import { ReviewPage } from './pages/ReviewPage';
 import { SignInPage } from './pages/SignInPage';
 import { HomePage } from './pages/HomePage';
 import { AdminPage } from './pages/AdminPage';
+import { HistoryPage, ReportHistoryPage } from './pages/HistoryPage';
 
 export function App() {
   return (
@@ -25,6 +26,8 @@ export function App() {
         <Route path="/report" element={<ReportPage />} />
         <Route path="/mine" element={<RequireUser><MyReportsPage /></RequireUser>} />
         <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/history" element={<RequireUser><HistoryPage /></RequireUser>} />
+        <Route path="/history/:id" element={<RequireUser><ReportHistoryPage /></RequireUser>} />
         <Route path="/queue" element={<RequireStaff><QueuePage /></RequireStaff>} />
         <Route path="/review" element={<RequireStaff><ReviewPage /></RequireStaff>} />
         <Route path="/admin" element={<RequireAdmin><AdminPage /></RequireAdmin>} />

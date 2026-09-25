@@ -53,6 +53,7 @@ export interface ReportSummary {
 
 export interface StatusEventView {
   id: string;
+  from?: Status;
   status: Status;
   note?: string;
   actor: { name: string; role: Role };

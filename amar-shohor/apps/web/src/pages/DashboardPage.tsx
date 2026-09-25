@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
 import { CategoryBars, TrendChart } from '../components/Charts';
 import { Icon } from '../components/Icon';
 import { Card, EmptyState, Skeleton, Stat } from '../components/ui';
@@ -213,6 +214,7 @@ function DashboardHead() {
   return (
     <div className="page-head" style={{ marginBottom: 0 }}>
       <h1>{t({ en: 'How the city is doing', bn: 'শহর কেমন চলছে' })}</h1>
+      <Link className="btn sm" to="/history"><Icon name="clock" size={15} />{t({ en: 'View report history', bn: 'রিপোর্টের ইতিহাস দেখুন' })}</Link>
       <p>
         {t({
           en: 'Every figure on this page is public. Resolution counts only where the citizen who reported the problem confirmed the fix.',
