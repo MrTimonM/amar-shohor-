@@ -26,6 +26,10 @@ npm run dev                   # API on :4000, web on :5173
 
 Open **http://localhost:5173**.
 
+### Figma Prototype
+
+Open https://www.figma.com/proto/uxMrKoq6tDWmCzx3Uo2OSb/Amar-Shohor-%E2%80%94-Prototype?node-id=70-2&p=f&t=76BzuKOrgKTRUVGR-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=70%3A2
+
 ### Getting a MongoDB
 
 Any one of these; nothing in the code changes between them.
