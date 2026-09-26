@@ -21,7 +21,7 @@ You need **Node 20+** and a **MongoDB** you can reach. Everything else is npm.
 cp .env.example .env          # then set MONGO_URL (see below)
 npm install
 npm run seed                  # ~58 problem clusters across 10 Dhaka wards
-npm run dev                   # API on :4000, web on :5173
+npm run dev                   # API on :4000, web on :5173 //
 ```
 
 Open **http://localhost:5173**.
