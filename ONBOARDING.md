@@ -18,33 +18,7 @@ The codebase is split into a few moving parts:
 
 ---
 
-## 1. High-level architecture
 
-The app is organized like a small monorepo:
-
-```text
-amar-shohor/
-├─ apps/
-│  ├─ web/            # frontend UI
-│  └─ api/            # backend API
-├─ packages/
-│  └─ shared/         # shared domain logic, types, schemas
-├─ services/
-│  └─ ai/             # AI/vision service
-├─ docker-compose.yml # local database and storage stack
-├─ package.json       # root scripts
-├─ README.md          # product and local dev instructions
-└─ IMPLEMENTATION_PLAN.md
-```
-
-In plain English:
-
-- the frontend is the part users interact with
-- the API is the app logic and data access layer
-- the AI service handles image analysis, category guesses, severity, and embeddings
-- the shared package keeps all the domain definitions consistent across frontend and backend
-
----
 
 ## 2. How the app works at runtime
 
@@ -304,6 +278,19 @@ If you are starting from zero, read in this order:
 5. `apps/web/src/main.tsx` — frontend bootstrap and providers
 6. `apps/api/src/dedup.ts` — core product logic
 7. `services/ai/app/main.py` — AI platform behavior
+
+---
+# 11. Quick mental model
+
+If you want the shortest possible understanding:
+
+- frontend = what citizens and staff see
+- API = the decision-making backend
+- shared package = the rules everyone agrees on
+- AI = background intelligence for photos and dedup
+- MongoDB/Redis/MinIO = persistence and infrastructure support
+
+This repo is a demo-grade civic reporting platform, not a random web app. The real product goal is not just form submission; it is public trust, traceability, deduplication, and accountability.
 
 ---
 
