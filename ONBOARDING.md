@@ -307,19 +307,6 @@ If you are starting from zero, read in this order:
 
 ---
 
-## 11. Quick mental model
-
-If you want the shortest possible understanding:
-
-- frontend = what citizens and staff see
-- API = the decision-making backend
-- shared package = the rules everyone agrees on
-- AI = background intelligence for photos and dedup
-- MongoDB/Redis/MinIO = persistence and infrastructure support
-
-This repo is a demo-grade civic reporting platform, not a random web app. The real product goal is not just form submission; it is public trust, traceability, deduplication, and accountability.
-
----
 
 ## 12. Best next step
 
