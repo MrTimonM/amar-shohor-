@@ -197,4 +197,149 @@ It compares candidate reports based on things like:
 - text similarity
 
 The goal is to collapse many reports of the same pothole or problem into one verified issue rather than a pile of duplicates.
+The code intentionally supports:
+
+- auto-merge when confidence is high
+- human review when confidence is medium
+- leave separate when confidence is low
+
+---
+
+## 6. Why the repo is a monorepo
+
+The root `package.json` defines workspaces for:
+
+- apps/web
+- apps/api
+- packages/shared
+
+This means the project shares tooling and installs dependencies once at the repo root.
+
+Useful commands from the root:
+
+```bash
+npm install
+npm run dev
+npm run build
+npm run typecheck
+npm run seed
+```
+
+Relevant scripts:
+
+- `dev`: starts API and web together
+- `build`: builds both apps
+- `seed`: populates demo data
+- `typecheck`: checks TypeScript across the codebase
+
+---
+
+## 7. Local environment and dependencies
+
+The repo expects local infrastructure for development.
+
+`docker-compose.yml` starts:
+
+- MongoDB
+- Redis
+- MinIO (S3-like local storage)
+
+This is important because the app is designed as if it will later run on AWS, while local dev uses Docker to stand in for cloud services.
+
+You will likely need:
+
+- Node 20+
+- MongoDB reachable locally or via Atlas
+- environment variables in `.env`
+
+The README includes instructions for running the app and connecting to MongoDB.
+
+---
+
+## 8. How auth works
+
+The auth system is in the API routes and the web app auth context.
+
+Main bits:
+
+- `apps/api/src/auth.ts`
+- `apps/api/src/routes/auth.ts`
+- `apps/web/src/lib/auth-context.tsx`
+
+The app supports user sign-in and role-based access. It also has a special staff flow for authority accounts.
+
+Important product behavior:
+
+- citizen accounts can report issues
+- authority accounts can triage and resolve issues
+- admin can manage access and oversight
+- public browsing does not require sign-in
+
+---
+
+## 9. How the map and dashboard are used
+
+The app is not just a form; it is a public accountability tool.
+
+The web frontend has pages like:
+
+- map view for geography
+- issue page for detail and timeline
+- dashboard for department/ward stats
+- queue page for authority work
+- review page for moderation and review of uncertain merges
+
+The map and stats are designed to make the city’s problems visible and trackable over time.
+
+---
+
+## 10. What to read first
+
+If you are starting from zero, read in this order:
+
+1. `README.md` — how the product is meant to work
+2. `IMPLEMENTATION_PLAN.md` — roadmap and architecture goals
+3. `package.json` — repo scripts and workspace layout
+4. `apps/api/src/index.ts` — API startup and route wiring
+5. `apps/web/src/main.tsx` — frontend bootstrap and providers
+6. `apps/api/src/dedup.ts` — core product logic
+7. `services/ai/app/main.py` — AI platform behavior
+
+---
+
+## 11. Quick mental model
+
+If you want the shortest possible understanding:
+
+- frontend = what citizens and staff see
+- API = the decision-making backend
+- shared package = the rules everyone agrees on
+- AI = background intelligence for photos and dedup
+- MongoDB/Redis/MinIO = persistence and infrastructure support
+
+This repo is a demo-grade civic reporting platform, not a random web app. The real product goal is not just form submission; it is public trust, traceability, deduplication, and accountability.
+
+---
+
+## 12. Best next step
+
+The next practical step is to run the app locally:
+
+```bash
+cd amar-shohor
+cp .env.example .env
+npm install
+npm run seed
+npm run dev
+```
+
+Then open the web app in the browser and click around the main flows:
+
+- sign in
+- submit a report
+- look at a map issue
+- inspect dashboard stats
+- review staff queue behavior
+
+That hands-on walkthrough will teach you more about the repo than reading the code alone.
 
